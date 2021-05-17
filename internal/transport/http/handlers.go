@@ -25,7 +25,8 @@ func NewHttpHandler(e *echo.Echo, srv services.Services) {
 	}
 
 	e.GET("api/koalatest/ping", handler.Ping)
-	e.GET("api/koalatest/register", handler.PostRegister)
+	e.POST("api/koalatest/register", handler.PostRegister)
+	e.GET("api/koalatest/get-token", handler.GetToken)
 
 }
 
@@ -67,6 +68,38 @@ func (h *HttpHandler) PostRegister(c echo.Context) error {
 		Success: true,
 		Message: koalaConst.SaveSuccess,
 		Data:    nil,
+	}
+
+	return c.JSON(http.StatusOK, resp)
+
+}
+
+func (h *HttpHandler) GetToken(c echo.Context) error {
+
+	postDTO := dto.GetTokensReqDTO{}
+
+	if err := c.Bind(&postDTO); err != nil {
+		log.Error(err.Error())
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	postDTO.PhoneNumberOrEmail = c.Request().FormValue("phone_number_or_email")
+	postDTO.Password = c.Request().FormValue("password")
+	postDTO.Signature = c.Request().FormValue("signature")
+
+	data, err := h.service.GetToken(&postDTO)
+
+	if err != nil {
+		log.Error(err.Error())
+		return c.JSON(getStatusCode(err), map[string]string{
+			"error": err.Error(),
+		})
+	}
+
+	var resp = dto.ResponseDTO{
+		Success: true,
+		Message: koalaConst.GetDataSuccess,
+		Data:    data,
 	}
 
 	return c.JSON(http.StatusOK, resp)

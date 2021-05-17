@@ -17,3 +17,8 @@ type Customers struct {
 type ExistingCustomer struct {
 	CustomerId string `db:"customer_id"`
 }
+
+type ExistingCustomerWithSalt struct {
+	CustomerId string `db:"customer_id"`
+	Salt       string `db:"salt"`
+}

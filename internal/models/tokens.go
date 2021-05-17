@@ -6,3 +6,7 @@ type Tokens struct {
 	RefreshType string `db:"refresh_type"`
 	CustomerId  string `db:"customer_id"`
 }
+
+type GetTokens struct {
+	Token string `db:"token"`
+}

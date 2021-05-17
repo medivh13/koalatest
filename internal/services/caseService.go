@@ -27,3 +27,19 @@ func (s *service) Register(req *dto.CustomersReqDTO) error {
 	}
 	return nil
 }
+
+func (s *service) GetToken(req *dto.GetTokensReqDTO) ([]*dto.GetTokenResponseDTO, error) {
+
+	err := req.Validate()
+
+	if err != nil {
+		return nil, err
+	}
+
+	datas, err := s.repo.GetToken(req.PhoneNumberOrEmail, req.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	return assembler.ToTokens(datas), nil
+}
