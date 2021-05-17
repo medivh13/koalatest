@@ -1,0 +1,12 @@
+appName: koala-test
+
+server:
+  port: "9009"
+  log_level: 3
+
+db:
+  host: localhost
+  port: 5432
+  dbname: koalatest
+  user: postgres
+  password: 3192jodyAA
